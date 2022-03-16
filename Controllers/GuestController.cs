@@ -38,7 +38,8 @@ public class GuestController : ControllerBase
         var res = await _guest.GetById(id);
 
         if (res == null)
-            return NotFound();
+            return NotFound("No Guest Found with Given Id");
+            
 
         var dto = res.asDto;
         dto.Schedules = (await _schedule.GetListByGuestId(id))
@@ -51,6 +52,10 @@ public class GuestController : ControllerBase
     [HttpPost]
     public async Task<ActionResult> Create([FromBody] GuestCreateDTO Data)
     {
+        
+         if (!(new string[] { "male", "female" }.Contains(Data.Gender.Trim().ToLower())))
+            return BadRequest("Gender value is not recognized");
+
        
         var toCreateGuest = new Guest
         {
@@ -73,7 +78,7 @@ public class GuestController : ControllerBase
         var existingGuest = await _guest.GetById(id);
 
         if (existingGuest == null)
-            return NotFound();
+            return NotFound("No Guest Found with Given Id To Update");
 
         var toUpdateGuest = existingGuest with
         {
