@@ -11,11 +11,13 @@ public class StaffController : ControllerBase
 {
     private readonly ILogger<StaffController> _logger;
     private readonly IStaffRepository _staff;
+    private readonly IRoomRepository _room;
 
-    public StaffController(ILogger<StaffController> logger, IStaffRepository staff)
+    public StaffController(ILogger<StaffController> logger, IStaffRepository staff,IRoomRepository room)
     {
         _logger = logger;
         _staff = staff;
+        _room =room;
     }
 
     [HttpGet]
@@ -37,7 +39,7 @@ public class StaffController : ControllerBase
         var dto = res.asDto;
         // dto.Schedules = (await _schedule.GetListByGuestId(id))
         //                 .Select(x => x.asDto).ToList();
-        // dto.Rooms = (await _room.GetListByGuestId(id)).Select(x => x.asDto).ToList();
+        dto.Rooms = (await _room.GetListByGuestId(id)).Select(x => x.asDto).ToList();
 
         return Ok(dto);
     }

@@ -51,6 +51,7 @@ public class GuestController : ControllerBase
     [HttpPost]
     public async Task<ActionResult> Create([FromBody] GuestCreateDTO Data)
     {
+       
         var toCreateGuest = new Guest
         {
             Address = Data.Address?.Trim(),

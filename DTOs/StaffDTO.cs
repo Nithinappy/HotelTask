@@ -6,12 +6,20 @@ namespace HotelTask.DTOs;
 
 public record StaffDTO
 {
+     [JsonPropertyName("staff_id")]
     public int StaffId { get; set; }
+     [JsonPropertyName("name")]
     public string Name { get; set; }
+     [JsonPropertyName("date_of_birth")]
     public DateTimeOffset DateOfBirth { get; set; }
+     [JsonPropertyName("gender")]
     public string Gender { get; set; }
+     [JsonPropertyName("mobile")]
     public long Mobile { get; set; }
+     [JsonPropertyName("shift")]
     public string Shift { get; set; }
+     [JsonPropertyName("rooms")]
+    public List<RoomDTO> Rooms{ get; set; }
 }
 
 public record StaffCreateDTO

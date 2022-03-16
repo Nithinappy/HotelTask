@@ -10,7 +10,9 @@ public interface IGuestRepository
     Task<bool> Update(Guest Item);
     Task<bool> Delete(int Id);
     Task<List<Guest>> GetList();
+    Task<List<Guest>> GetScheduleByGuestId(int Id);
     Task<Guest> GetById(int Id);
+    
 }
 
 public class GuestRepository : BaseRepository, IGuestRepository
@@ -53,6 +55,17 @@ public class GuestRepository : BaseRepository, IGuestRepository
 
         using (var con = NewConnection)
             return (await con.QueryAsync<Guest>(query)).AsList();
+    }
+
+    public async Task<List<Guest>> GetScheduleByGuestId(int Id)
+    {
+         var query = $@"SELECT g.* FROM {TableNames.schedule} s 
+        LEFT JOIN {TableNames.guest} g ON g.guest_id = s.guest_id 
+        WHERE s.schedule_id = @Id";
+         using (var con = NewConnection)
+        
+            return (await con.QueryAsync<Guest>(query, new { Id })).AsList();
+ 
     }
 
     public async Task<bool> Update(Guest Item)

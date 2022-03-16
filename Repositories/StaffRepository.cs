@@ -10,6 +10,7 @@ public interface IStaffRepository
     Task<bool> Update(Staff Item);
     Task<bool> Delete(int Id);
     Task<List<Staff>> GetList();
+    Task<List<Staff>> GetStaffRoomById(int Id);
     Task<Staff> GetById(int Id);
 }
 
@@ -56,6 +57,16 @@ public class StaffRepository : BaseRepository, IStaffRepository
         using (var con = NewConnection)
             return (await con.QueryAsync<Staff>(query)).AsList();
 
+    }
+
+    public async Task<List<Staff>> GetStaffRoomById(int Id)
+    {
+        var query = $@"SELECT s.* FROM {TableNames.staff} s 
+        LEFT JOIN {TableNames.room} r ON r.staff_id = s.staff_id 
+        WHERE r.staff_id = @Id";
+        using (var con = NewConnection)
+        
+            return (await con.QueryAsync<Staff>(query, new { Id })).AsList();
     }
 
     public async Task<bool> Update(Staff Item)

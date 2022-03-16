@@ -6,7 +6,7 @@ namespace HotelTask.DTOs;
 public record ScheduleDTO
 {
     [JsonPropertyName("id")]
-    public int Id { get; set; }
+    public int ScheduleId { get; set; }
 
     [JsonPropertyName("check_in")]
     public DateTimeOffset CheckIn { get; set; }
@@ -20,8 +20,12 @@ public record ScheduleDTO
     [JsonPropertyName("price")]
     public double Price { get; set; }
 
-    [JsonPropertyName("room")]
-    public RoomDTO Room { get; set; }
+    [JsonPropertyName("rooms")]
+    public List<RoomDTO> Rooms { get; set; }
+     
+    public List<GuestDTO> Guests{ get; set; }
+    //   [JsonPropertyName("rooms")]
+    // public List<RoomDTO> Rooms{ get; set; }
 }
 
 public record CreateScheduleDTO
@@ -46,10 +50,10 @@ public record CreateScheduleDTO
     public double Price { get; set; }
     [JsonPropertyName("guest_id")]
     [Required]
-    public long GuestId { get; set; }
+    public int GuestId { get; set; }
     [JsonPropertyName("room_id")]
     [Required]
-    public long RoomId { get; set; }
+    public int RoomId { get; set; }
 
 
 }
@@ -69,15 +73,12 @@ public record UpdateScheduleDTO
     [Required]
 
     [JsonPropertyName("guest_count")]
-    public int GuestCount { get; set; }
+    public int? GuestCount { get; set; }
 
-
-    [JsonPropertyName("guest_id")]
+    
+    [JsonPropertyName("price")]
     [Required]
-    public long GuestId { get; set; }
-    [JsonPropertyName("room_id")]
-    [Required]
-    public long RoomId { get; set; }
+    public double? Price { get; set; }
 
 
 }

@@ -17,11 +17,15 @@ public record RoomDTO
 
     [JsonPropertyName("staff_name")]
     public string StaffName { get; set; }
+    
+    [JsonPropertyName("room_staffs")]
+    public List<StaffDTO> Staffs { get; set; }
+     [JsonPropertyName("schedules")]
+    public List<ScheduleDTO> Schedules { get; set; }
+
+  
 }
-// type smallint NOT NULL,
-//    size integer NOT NULL,
-//     price numeric(10,2) NOT NULL,
-//     staff_id integer
+
 
 public record CreateRoomDTO
 {
@@ -63,5 +67,5 @@ public record UpdateRoomDTO
     [Required]
     public decimal? Price { get; set; }
 
-    
+
 }

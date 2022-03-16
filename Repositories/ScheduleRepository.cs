@@ -12,6 +12,8 @@ public interface IScheduleRepository
     Task<List<Schedule>> GetList();
     Task<Schedule> GetById(int Id);
     Task<List<Schedule>> GetListByGuestId(int GuestId);
+    Task<List<Schedule>> GetScheduleByRoomId(int ScheduleId);
+   
 }
 
 public class ScheduleRepository : BaseRepository, IScheduleRepository
@@ -35,16 +37,20 @@ public class ScheduleRepository : BaseRepository, IScheduleRepository
 
     public async Task<bool> Delete(int Id)
     {
-        var query = $@"DELETE FROM {TableNames.schedule} WHERE id = @Id";
+        var query = $@"DELETE FROM {TableNames.schedule} WHERE schedule_id = @Id";
 
         using (var con = NewConnection)
             return await con.ExecuteAsync(query, new { Id }) > 0;
 
     }
 
-    public Task<Schedule> GetById(int Id)
+    public async Task<Schedule> GetById(int Id)
     {
-        throw new NotImplementedException();
+        var query = $@"SELECT * FROM {TableNames.schedule} WHERE schedule_id = @Id";
+
+        using (var con = NewConnection)
+            return await con.QuerySingleOrDefaultAsync<Schedule>(query, new { Id });
+  
     }
 
     public async Task<List<Schedule>> GetList()
@@ -65,8 +71,23 @@ public class ScheduleRepository : BaseRepository, IScheduleRepository
             return (await con.QueryAsync<Schedule>(query, new { GuestId })).AsList();
     }
 
-    public Task<bool> Update(Schedule Item)
+    public async Task<List<Schedule>> GetScheduleByRoomId(int ScheduleId)
     {
-        throw new NotImplementedException();
+         var query = $@"SELECT s.* FROM {TableNames.schedule} s 
+        LEFT JOIN {TableNames.room} r ON r.room_id = s.room_id 
+        WHERE s.schedule_id = @ScheduleId";
+        using (var con = NewConnection)
+        
+            return (await con.QueryAsync<Schedule>(query, new { ScheduleId })).AsList();
+    }
+
+    public async Task<bool> Update(Schedule Item)
+    {
+        var query = $@"UPDATE {TableNames.schedule} 
+        SET check_in = @CheckIn, check_out=@CheckOut, guest_count=@GuestCount, price=@Price WHERE schedule_id = @ScheduleId";
+
+
+        using (var con = NewConnection)
+            return await con.ExecuteAsync(query, Item) > 0;
     }
 }

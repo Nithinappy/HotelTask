@@ -11,11 +11,15 @@ public class RoomController : ControllerBase
 {
     private readonly ILogger<RoomController> _logger;
     private readonly IRoomRepository _room;
+    private readonly IStaffRepository _staff;
+    private readonly IScheduleRepository _schedule;
 
-    public RoomController(ILogger<RoomController> logger, IRoomRepository _room)
+    public RoomController(ILogger<RoomController> logger, IRoomRepository _room,IStaffRepository staff,IScheduleRepository schedule)
     {
         _logger = logger;
         this._room = _room;
+        _staff =staff;
+        _schedule = schedule;
     }
 
     [HttpGet]
@@ -34,13 +38,18 @@ public class RoomController : ControllerBase
 
         if (res is null)
             return NotFound();
-
-        return Ok(res.asDto);
+        var dto = res.asDto;
+       
+        dto.Staffs = (await _staff.GetStaffRoomById(id)).Select(x => x.asDto).ToList();
+        dto.Schedules = (await _schedule.GetScheduleByRoomId(id))
+                        .Select(x => x.asDto).ToList();
+        return Ok(dto);
     }
 
     [HttpPost]
     public async Task<ActionResult> Create([FromBody] CreateRoomDTO Data)
     {
+        
         var toCreateRoom = new Room
         {
             Type = Data.Type,

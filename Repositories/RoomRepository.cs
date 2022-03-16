@@ -12,6 +12,8 @@ public interface IRoomRepository
     Task<List<Room>> GetList();
     Task<Room> GetById(int Id);
     Task<List<Room>> GetListByGuestId(int GuestId);
+    Task<List<Room>> GetListByScheduleId(int ScheduleId);
+    
 }
 
 public class RoomRepository : BaseRepository, IRoomRepository
@@ -72,6 +74,17 @@ public class RoomRepository : BaseRepository, IRoomRepository
         using (var con = NewConnection)
             return (await con.QueryAsync<Room>(query, new { GuestId })).AsList();
     }
+
+    public async Task<List<Room>> GetListByScheduleId(int ScheduleId)
+    {
+       var query = $@"SELECT r.* FROM {TableNames.schedule} s 
+        LEFT JOIN {TableNames.room} r ON r.room_id = s.room_id 
+        WHERE s.schedule_id = @ScheduleId";
+        using (var con = NewConnection)
+             return (await con.QueryAsync<Room>(query, new { ScheduleId })).AsList();
+
+           
+               }
 
     public async Task<bool> Update(Room Item)
     {

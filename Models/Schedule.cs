@@ -4,7 +4,7 @@ namespace HotelTask.Models;
 
 public record Schedule
 {
-    public int Id { get; set; }
+    public int ScheduleId { get; set; }
     public DateTimeOffset CheckIn { get; set; }
     public DateTimeOffset CheckOut { get; set; }
     public int GuestCount { get; set; }
@@ -18,7 +18,7 @@ public record Schedule
         CheckIn = CheckIn,
         CheckOut = CheckOut,
         GuestCount = GuestCount,
-        Id = Id,
+        ScheduleId = ScheduleId,
         Price = Price,
     };
 }
