@@ -40,9 +40,13 @@ public class StaffRepository : BaseRepository, IStaffRepository
 
     }
 
-    public Task<Staff> GetById(int Id)
+    public async Task<Staff> GetById(int Id)
     {
-        throw new NotImplementedException();
+         var query = $@"SELECT * FROM {TableNames.staff} WHERE staff_id = @Id";
+
+        using (var con = NewConnection)
+            return await con.QuerySingleOrDefaultAsync<Staff>(query, new { Id });
+
     }
 
     public async Task<List<Staff>> GetList()
@@ -54,8 +58,13 @@ public class StaffRepository : BaseRepository, IStaffRepository
 
     }
 
-    public Task<bool> Update(Staff Item)
+    public async Task<bool> Update(Staff Item)
     {
-        throw new NotImplementedException();
+         var query = $@"UPDATE {TableNames.staff} 
+        SET name = @Name, mobile = @Mobile, 
+        date_of_birth = @DateOfBirth ,gender = @Gender,shift=@Shift WHERE staff_id = @StaffId";
+
+        using (var con = NewConnection)
+            return await con.ExecuteAsync(query, Item) > 0;
     }
 }

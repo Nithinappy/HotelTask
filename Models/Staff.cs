@@ -6,7 +6,7 @@ namespace HotelTask.Models;
 
 public record Staff
 {
-    public int Id { get; set; }
+    public int StaffId { get; set; }
     public string Name { get; set; }
     public DateTimeOffset DateOfBirth { get; set; }
     public string Gender { get; set; }
@@ -14,6 +14,7 @@ public record Staff
     public string Shift { get; set; }
     public StaffDTO asDto => new StaffDTO
     {
+        StaffId = StaffId,
         Name = Name,
         DateOfBirth = DateOfBirth,
         Gender = Gender,

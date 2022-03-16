@@ -5,7 +5,7 @@ namespace HotelTask.Models;
 
 public record Room
 {
-    public int Id { get; set; }
+    public int RoomId { get; set; }
     public string Type { get; set; }
     public int Size { get; set; }
     public double Price { get; set; }
@@ -14,9 +14,9 @@ public record Room
 
     public RoomDTO asDto => new RoomDTO
     {
-        Id = Id,
+        RoomId = RoomId,
         Size = Size,
-        Type = Type.ToString(),
+        Type = Type,
         StaffName = StaffName,
     };
 }

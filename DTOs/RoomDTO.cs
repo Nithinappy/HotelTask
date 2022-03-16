@@ -7,7 +7,7 @@ namespace HotelTask.DTOs;
 public record RoomDTO
 {
     [JsonPropertyName("id")]
-    public int Id { get; set; }
+    public int RoomId { get; set; }
 
     [JsonPropertyName("type")]
     public string Type { get; set; }
@@ -58,12 +58,10 @@ public record UpdateRoomDTO
 
     [JsonPropertyName("size")]
     [Required]
-    public int Size { get; set; }
+    public int? Size { get; set; }
     [JsonPropertyName("price")]
     [Required]
-    public decimal Price { get; set; }
+    public decimal? Price { get; set; }
 
-    [JsonPropertyName("staff_name")]
-    [Required]
-    public string StaffName { get; set; }
+    
 }

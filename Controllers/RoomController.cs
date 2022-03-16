@@ -43,7 +43,7 @@ public class RoomController : ControllerBase
     {
         var toCreateRoom = new Room
         {
-            // Type = Data.Type,
+            Type = Data.Type,
             Size = Data.Size,
             Price = Data.Price,
             StaffId = Data.StaffId
@@ -57,32 +57,29 @@ public class RoomController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    // public async Task<ActionResult> Update([FromRoute] int id,
-    // [FromBody] UpdateRoomDTO Data)
-    // {
-    //     var existing = await _room.GetById(id);
-    //     if (existing is null)
-    //         return NotFound("No Room found with given Room Id");
+    public async Task<ActionResult> Update([FromRoute] int id,
+    [FromBody] UpdateRoomDTO Data)
+    {
+        var existing = await _room.GetById(id);
+        if (existing is null)
+            return NotFound("No Room found with given Room Id");
 
-    //     var toUpdateRoom = existing with
-    //     {
+        var toUpdateRoom = existing with
+        {
 
-    //         // UserName = Data.UserName ?? existing.UserName,
-    //         // Address = Data.Address ?? existing.Address,
-    //         // Bio = Data.Bio ?? existing.Bio,
-    //         // Email = Data.Email ?? existing.Email
+            Type=Data.Type ?? existing.Type,
+            Size=Data.Size ?? existing.Size,
+            Price=Data.Size ?? existing.Price,
+           
+        };
 
+        var didUpdate = await _room.Update(toUpdateRoom);
 
+        if (!didUpdate)
+            return StatusCode(StatusCodes.Status500InternalServerError, "Could not update user");
 
-    //     };
-
-    //     // var didUpdate = await _room.Update(toUpdateRoom);
-
-    //     if (!didUpdate)
-    //         return StatusCode(StatusCodes.Status500InternalServerError, "Could not update user");
-
-    //     return NoContent();
-    // }
+        return NoContent();
+    }
 
     [HttpDelete("{id}")]
     public async Task<ActionResult> Delete([FromRoute] int id)

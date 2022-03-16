@@ -7,7 +7,7 @@ namespace HotelTask.Repositories;
 public interface IRoomRepository
 {
     Task<Room> Create(Room Item);
-    Task Update(Room Item);
+    Task<bool> Update(Room Item);
     Task<bool> Delete(int Id);
     Task<List<Room>> GetList();
     Task<Room> GetById(int Id);
@@ -27,6 +27,7 @@ public class RoomRepository : BaseRepository, IRoomRepository
         (type, size, price, staff_id) 
         VALUES (@Type, @Size, @Price, @StaffId) 
         RETURNING *";
+        
         using (var con = NewConnection)
             return await con.QuerySingleAsync<Room>(query, Item);
 
@@ -34,7 +35,7 @@ public class RoomRepository : BaseRepository, IRoomRepository
 
     public async Task<bool> Delete(int Id)
     {
-        var query = $@"DELETE FROM {TableNames.room} WHERE id = @Id";
+        var query = $@"DELETE FROM {TableNames.room} WHERE room_id = @Id";
 
         using (var con = NewConnection)
             return await con.ExecuteAsync(query, new { Id }) > 0;
@@ -44,8 +45,8 @@ public class RoomRepository : BaseRepository, IRoomRepository
     public async Task<Room> GetById(int Id)
     {
         var query = $@"SELECT r.*, s.name AS staff_name FROM {TableNames.room} r
-        LEFT JOIN {TableNames.staff} s ON s.id = r.staff_id 
-        WHERE r.id = @Id";
+        LEFT JOIN {TableNames.staff} s ON s.staff_id = r.staff_id 
+        WHERE r.room_id = @Id";
 
         using (var con = NewConnection)
             return await con.QuerySingleOrDefaultAsync<Room>(query, new { Id });
@@ -72,8 +73,12 @@ public class RoomRepository : BaseRepository, IRoomRepository
             return (await con.QueryAsync<Room>(query, new { GuestId })).AsList();
     }
 
-    public Task Update(Room Item)
+    public async Task<bool> Update(Room Item)
     {
-        throw new NotImplementedException();
+         var query = $@"UPDATE {TableNames.room} 
+        SET type = @Type, size = @Size, price = @Size WHERE room_id = @RoomId";
+
+        using (var con = NewConnection)
+            return await con.ExecuteAsync(query, Item) > 0;
     }
 }

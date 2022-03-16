@@ -6,7 +6,7 @@ namespace HotelTask.DTOs;
 
 public record StaffDTO
 {
-    public int Id { get; set; }
+    public int StaffId { get; set; }
     public string Name { get; set; }
     public DateTimeOffset DateOfBirth { get; set; }
     public string Gender { get; set; }
@@ -26,18 +26,13 @@ public record StaffCreateDTO
     [Required]
     public long Mobile { get; set; }
 
-    [JsonPropertyName("email")]
-    [Required]
-    [MaxLength(255)]
-    public string Email { get; set; }
-
     [JsonPropertyName("date_of_birth")]
     [Required]
     public DateTimeOffset DateOfBirth { get; set; }
 
-    [JsonPropertyName("address")]
+    [JsonPropertyName("shift")]
     [MaxLength(255)]
-    public string Address { get; set; }
+    public string Shift { get; set; }
 
     [JsonPropertyName("gender")]
     [Required]
@@ -52,23 +47,19 @@ public record StaffUpdateDTO
     [MinLength(3)]
     [MaxLength(255)]
     public string Name { get; set; }
+    [JsonPropertyName("date_of_birth")]
+    [Required]
+    public DateTimeOffset DateOfBirth { get; set; }
+    [JsonPropertyName("gender")]
+    [Required]
+    public string Gender { get; set; }
 
     [JsonPropertyName("mobile")]
     [Required]
     public long Mobile { get; set; }
-
-    [JsonPropertyName("email")]
-    [Required]
+    [JsonPropertyName("shift")]
     [MaxLength(255)]
-    public string Email { get; set; }
-
-    [JsonPropertyName("date_of_birth")]
-    [Required]
-    public DateTimeOffset DateOfBirth { get; set; }
-
-    [JsonPropertyName("address")]
-    [MaxLength(255)]
-    public string Address { get; set; }
+    public string Shift { get; set; }
 
 
 }
